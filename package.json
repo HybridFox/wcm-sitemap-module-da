@@ -1,7 +1,7 @@
 {
-    "name": "@wcm/boilerplate",
+    "name": "@wcm/sitemap-module-da",
     "version": "0.0.1",
-    "description": "Boilerplate module",
+    "description": "Sitemap module",
     "main": "app",
     "scripts": {
         "test": "NODE_ENV=test APP=test ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha"
@@ -17,20 +17,6 @@
         "CMS"
     ],
     "wcmModule": {
-        "angularDirPath": "public/app/",
-        "cssDirPath": "public/styles/",
-        "moduleConfig": {
-            "angularModule": "wcm-boilerplate",
-            "translationKey": "Boilerplate",
-            "operationType": "boilerplate",
-            "icon": "ban",
-            "type": "system",
-            "machineName": "boilerplate",
-            "navigationItem": true,
-            "authentication": {
-                "requiresLogin": true
-            }
-        },
         "variables": []
     },
     "author": "Jeroen Valcke",
