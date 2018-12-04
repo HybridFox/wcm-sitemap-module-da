@@ -1,19 +1,27 @@
 const variablesHelper = require("../helpers/variables");
+const cronController = require("../helpers/cron");
 
-const onLoadComplete = () => {
+const onEnabled = () => {
+	console.log("ONENABLED HERE")
 	// Initiate passport strategies
-	variablesHelper.reload();
+	variablesHelper
+		.reload()
+		.then(() => cronController.init());
 };
 const onConfigurationChanged = () => {
+	console.log("ONCONFIGURATIONCHANGED HERE")
 	// Initiate passport strategies
-	variablesHelper.reload();
+	variablesHelper
+		.reload()
+		.then(() => cronController.init());
 };
 
-module.exports.handleHooks = (hooks) => {
-	var myHooks = {
-		onLoadComplete: onLoadComplete,
-		onConfigurationChanged: onConfigurationChanged,
-	};
+const beforeRemove = () => {
+	cronController.stop();
+}
 
-	Object.assign(hooks, myHooks);
-};
+module.exports.handleHooks = (hooks) => Object.assign(hooks, {
+	onEnabled,
+	onConfigurationChanged,
+	beforeRemove,
+});

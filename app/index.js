@@ -2,6 +2,8 @@ const setupRoutes = require("./routes");
 const variablesHelper = require("./helpers/variables");
 const hooksController = require("./controllers/hooks");
 
+const sitemapGenerator = require("./helpers/sitemapGenerator");
+
 module.exports = (app, hooks, moduleInfo) => {
 	// Get variables
 	variablesHelper.reload(moduleInfo)
