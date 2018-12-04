@@ -31,7 +31,7 @@
                 "label": "Cron time",
                 "description": "Cron time string",
                 "key": "cron",
-                "value": "* * * * * *",
+                "value": "10 0 * * *",
                 "type": "text",
                 "required": true
             }

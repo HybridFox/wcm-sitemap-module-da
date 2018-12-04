@@ -6,14 +6,12 @@ const sitemapGenerator = require("../helpers/sitemapGenerator");
 let job;
 
 module.exports.init = () => {
-	console.log("INITIALIZING CRONINIT");
-
 	if (job) {
 		job.stop();
 	}
 
 	job = new CronJob({
-		cronTime: '* * * * *',
+		cronTime: variablesHelper.get().cron,
 		onTick: () => {
 			console.log("CRON: GENERATING SITEMAP."); // eslint-disable-line no-console
 			return sitemapGenerator()
