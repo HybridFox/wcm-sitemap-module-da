@@ -23,7 +23,7 @@
                 "label": "Base url (trailing slash)",
                 "description": "This URL will prefix all the paths in the sitemap",
                 "key": "baseURL",
-                "value": "http://localhost:3602/",
+                "value": "http://host.docker.internal:3602/",
                 "type": "text",
                 "required": true
             },
@@ -31,7 +31,7 @@
                 "label": "Cron time",
                 "description": "Cron time string",
                 "key": "cron",
-                "value": "10 0 * * *",
+                "value": "* * * * *",
                 "type": "text",
                 "required": true
             }

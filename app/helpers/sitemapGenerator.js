@@ -38,7 +38,9 @@ const generateCustomMap = (contentType, [lang, location], lastmod, changefreq) =
 		routePrefix = prefixes[contentType];
 	}
 
-	return { location: variablesHelper.get().baseURL + lang + "/" + routePrefix + location, lastmod, changefreq };
+	const langPrefix = lang ? `${lang}/` : ""
+
+	return { location: variablesHelper.get().baseURL + langPrefix + routePrefix + location, lastmod, changefreq };
 };
 
 // Get slug of a content item and convert it to "[key(=lang)]/[value(=slug)]""
@@ -97,17 +99,25 @@ const generateXMLSitemap = (sitemapArray) => {
 	return urlSet.end();
 };
 
+const getFixedSitemapEntries = () => [
+	generateCustomMap(null, ["", ""], new Date().toISOString(), DEFAULT_FREQ), // homepage
+	generateCustomMap(null, ["en", ""], new Date().toISOString(), DEFAULT_FREQ), // homepage
+	generateCustomMap(null, ["nl", ""], new Date().toISOString(), DEFAULT_FREQ), // homepage
+	generateCustomMap(null, ["nl", "opdrachten/open"], new Date().toISOString(), DEFAULT_FREQ),
+	generateCustomMap(null, ["nl", "opdrachten"], new Date().toISOString(), DEFAULT_FREQ),
+];
+
 module.exports = () => {
 	const oldCacheId = currCachId;
 
 	return getContentAndMapIt()
+		.then((sitemapArray) => sitemapArray.concat(getFixedSitemapEntries()))
 		.then((sitemapArray) => {
 			const sitemap = generateXMLSitemap(sitemapArray);
 			const readable = new stream.Readable();
 
 			readable.push(sitemap);
 			readable.push(null);
-
 			return gridFSHelper.writeStreamToGridFS({ fileName: "sitemap.xml" }, readable)
 		})
 		.then((cachedItem) => new Promise((resolve, reject) => cacheController.set(
