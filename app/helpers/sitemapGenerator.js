@@ -43,7 +43,6 @@ const generateCustomMap = (contentType, [lang, location], lastmod, changefreq) =
 	return { location: variablesHelper.get().baseURL + langPrefix + routePrefix + location, lastmod, changefreq };
 };
 
-// Get slug of a content item and convert it to "[key(=lang)]/[value(=slug)]""
 const getLocations = (contentItem) => R.compose(
 	R.toPairs,
 	R.omit(["multiLanguage"]),

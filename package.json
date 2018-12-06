@@ -34,6 +34,22 @@
                 "value": "* * * * *",
                 "type": "text",
                 "required": true
+            },
+            {
+                "label": "SSR Url",
+                "description": "Url to call when a page updated",
+                "key": "ssrURL",
+                "value": "http://localhost:3042/render",
+                "type": "text",
+                "required": true
+            },
+            {
+                "label": "SSR Api Key",
+                "description": "Api Key of the SSR service",
+                "key": "ssrApiKey",
+                "value": "",
+                "type": "text",
+                "required": true
             }
         ]
     },
