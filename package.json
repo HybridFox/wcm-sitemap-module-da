@@ -1,7 +1,7 @@
 {
-    "name": "@wcm/boilerplate",
+    "name": "@wcm/sitemap-module-da",
     "version": "0.0.1",
-    "description": "Boilerplate module",
+    "description": "Sitemap module",
     "main": "app",
     "scripts": {
         "test": "NODE_ENV=test APP=test ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha"
@@ -10,6 +10,7 @@
         "@wcm:registry": "https://nexusrepo.antwerpen.be/repository/npm-private"
     },
     "keywords": [
+        "Digipolis Antwerpen",
         "Boilerplate",
         "WCM",
         "Pelorus",
@@ -17,26 +18,46 @@
         "CMS"
     ],
     "wcmModule": {
-        "angularDirPath": "public/app/",
-        "cssDirPath": "public/styles/",
-        "moduleConfig": {
-            "angularModule": "wcm-boilerplate",
-            "translationKey": "Boilerplate",
-            "operationType": "boilerplate",
-            "icon": "ban",
-            "type": "system",
-            "machineName": "boilerplate",
-            "navigationItem": true,
-            "authentication": {
-                "requiresLogin": true
+        "variables": [
+            {
+                "label": "Base url (trailing slash)",
+                "description": "This URL will prefix all the paths in the sitemap",
+                "key": "baseURL",
+                "value": "http://host.docker.internal:3602/",
+                "type": "text",
+                "required": true
+            },
+            {
+                "label": "Cron time",
+                "description": "Cron time string",
+                "key": "cron",
+                "value": "* * * * *",
+                "type": "text",
+                "required": true
+            },
+            {
+                "label": "SSR Url",
+                "description": "Url to call when a page updated",
+                "key": "ssrURL",
+                "value": "http://localhost:3042/render",
+                "type": "text",
+                "required": true
+            },
+            {
+                "label": "SSR Api Key",
+                "description": "Api Key of the SSR service",
+                "key": "ssrApiKey",
+                "value": "",
+                "type": "text",
+                "required": true
             }
-        },
-        "variables": []
+        ]
     },
     "author": "Jeroen Valcke",
     "license": "ISC",
     "dependencies": {
         "@wcm/module-helper": "1.0.0",
+        "cron": "^1.5.0",
         "glob": "^7.1.2",
         "path": "^0.12.7",
         "q": "^1.5.1",

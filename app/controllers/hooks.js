@@ -1,19 +1,27 @@
 const variablesHelper = require("../helpers/variables");
+const cronController = require("../helpers/cron");
+const contentListener = require("../helpers/contentListener");
 
-const onLoadComplete = () => {
-	// Initiate passport strategies
-	variablesHelper.reload();
+const onEnabled = () => {
+	variablesHelper
+		.reload()
+		.then(() => cronController.init());
+
+	contentListener.start();
 };
 const onConfigurationChanged = () => {
-	// Initiate passport strategies
-	variablesHelper.reload();
+	variablesHelper
+		.reload()
+		.then(() => cronController.init());
 };
 
-module.exports.handleHooks = (hooks) => {
-	var myHooks = {
-		onLoadComplete: onLoadComplete,
-		onConfigurationChanged: onConfigurationChanged,
-	};
+const beforeRemove = () => {
+	cronController.stop();
+	contentListener.stop();
+}
 
-	Object.assign(hooks, myHooks);
-};
+module.exports.handleHooks = (hooks) => Object.assign(hooks, {
+	onEnabled,
+	onConfigurationChanged,
+	beforeRemove,
+});
