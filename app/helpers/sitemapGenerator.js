@@ -13,7 +13,7 @@ const ContentTypeModel = require(path.join(process.cwd(), "app/models/contentTyp
 const defaultReturnFields = {
 	"meta.lastModified": 1,
 	"meta.created": 1,
-    "meta.slug": 1
+	"meta.slug": 1
 };
 
 const prefixes = {

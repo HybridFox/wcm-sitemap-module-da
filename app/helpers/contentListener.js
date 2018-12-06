@@ -4,7 +4,7 @@ const wcmEventWrapper = require("@wcm/module-helper").emitter;
 const variablesHelper = require("./variables");
 const ContentTypeModel = require("@wcm/module-helper").models.ContentType;
 
-const getContentType = (_id) => ContentTypeModel.findOne({ _id }).lean().exec();
+const fetchContentType = (_id) => ContentTypeModel.findOne({ _id }).lean().exec();
 
 const prefixes = {
 	"blogpost": "blog/"
@@ -52,6 +52,15 @@ const sendUpdate = (data) => request({
 	body: data,
 });
 
+const getContentType = (contentItem) => R.compose(
+    R.ifElse(
+        R.is(String),
+        fetchContentType,
+        (ct) => Promise.resolve(ct)
+    ),
+    R.path(["meta", "contentType"])
+)(contentItem);
+
 const contentChangeHandler = (content) => {
 	if (content.toObject) {
 		content = content.toObject();
@@ -61,18 +70,16 @@ const contentChangeHandler = (content) => {
 		return;
 	}
 
-	return getContentType(R.pathOr(null, ["meta", "contentType"], content))
+	return getContentType(content)
 		.then((contentType) => {
 			if (!R.path(["meta", "canBeFiltered"], contentType)) {
 				return;
 			}
 
-			console.log("valid page")
-
 			return generateSitemapObject(contentType.meta.safeLabel, content);
 		})
-		.then((data) => console.log(data) || sendUpdate(data))
-		.then((res) => console.log(res.body))
+		.then((data) => sendUpdate(data))
+		.catch((err) => console.log(err))
 };
 
 const contentRemoveHandler = (content) => {
@@ -84,18 +91,15 @@ const contentRemoveHandler = (content) => {
 		return;
 	}
 
-	return getContentType(R.pathOr(null, ["meta", "contentType"], content))
+	return getContentType(content)
 		.then((contentType) => {
 			if (!R.path(["meta", "canBeFiltered"], contentType)) {
 				return;
 			}
 
-			console.log("valid page")
-
 			return generateSitemapObject(contentType.meta.safeLabel, content);
 		})
-		.then((data) => console.log(data) || sendUpdate(data))
-		.then((res) => console.log(res.body))
+		.then((data) => sendUpdate(data))
 };
 
 module.exports.start = () => {
