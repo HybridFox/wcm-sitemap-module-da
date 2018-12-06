@@ -79,17 +79,23 @@ const contentRemoveHandler = (content) => {
 	if (content.toObject) {
 		content = content.toObject();
 	}
+	// Skip if the content item is not published
+	if (!R.path(["meta", "published"])(content)) {
+		return;
+	}
 
-	return isPage(content).then((contentIsPage) => {
-		// Skip if the content is not a page
-		if (!contentIsPage) {
-			return;
-		}
+	return getContentType(R.pathOr(null, ["meta", "contentType"], content))
+		.then((contentType) => {
+			if (!R.path(["meta", "canBeFiltered"], contentType)) {
+				return;
+			}
 
-		const data = generateSitemapObjects(content);
+			console.log("valid page")
 
-		console.log("send remove data", data);
-	});
+			return generateSitemapObject(contentType.meta.safeLabel, content);
+		})
+		.then((data) => console.log(data) || sendUpdate(data))
+		.then((res) => console.log(res.body))
 };
 
 module.exports.start = () => {
