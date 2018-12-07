@@ -22,16 +22,11 @@ const generateCustomMap = (contentType, [lang, location], lastmod, changefreq) =
 	return { loc: variablesHelper.get().baseURL + langPrefix + routePrefix + location, lastmod, changefreq };
 };
 
-const getLocations = (contentItem) => {
-	const memes = R.compose(
-		R.toPairs,
-		R.omit(["multiLanguage"]),
-		R.pathOr(null, ["meta", "slug"])
-	)(contentItem);
-
-	console.log(memes);
-	return memes;
-}
+const getLocations = (contentItem) => R.compose(
+	R.toPairs,
+	R.omit(["multiLanguage"]),
+	R.pathOr(null, ["meta", "slug"])
+)(contentItem);
 
 const generateSitemapObject = (contentType, content) => {
 	const lastmod = R.pathOr(new Date().toISOString(), ["meta", "lastModified"])(content);
@@ -52,7 +47,7 @@ const sendUpdate = (data) => request({
 	body: data,
 });
 
-const sendDelete = (url) => request({
+const sendDelete = (data) => console.log(data) || request({
 	url: variablesHelper.get().ssrURL,
 	headers: {
 		authorization: `token ${variablesHelper.get().ssrApiKey}`
@@ -96,10 +91,6 @@ const contentRemoveHandler = (content) => {
 	if (content.toObject) {
 		content = content.toObject();
 	}
-	// Skip if the content item is not published
-	if (!R.path(["meta", "published"])(content)) {
-		return;
-	}
 
 	return getContentType(content)
 		.then((contentType) => {
@@ -109,7 +100,8 @@ const contentRemoveHandler = (content) => {
 
 			return generateSitemapObject(contentType.meta.safeLabel, content);
 		})
-		.then((data) => sendUpdate(data))
+		.then((data) => console.log("SEND DELETE", data) || sendDelete(data))
+		.catch((err) => console.log(err))
 };
 
 module.exports.start = () => {
