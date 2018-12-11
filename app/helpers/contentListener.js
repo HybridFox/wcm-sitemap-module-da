@@ -47,7 +47,7 @@ const sendUpdate = (data) => request({
 	body: data,
 });
 
-const sendDelete = (data) => console.log(data) || request({
+const sendDelete = (data) => request({
 	url: variablesHelper.get().ssrURL,
 	headers: {
 		authorization: `token ${variablesHelper.get().ssrApiKey}`
@@ -100,7 +100,7 @@ const contentRemoveHandler = (content) => {
 
 			return generateSitemapObject(contentType.meta.safeLabel, content);
 		})
-		.then((data) => console.log("SEND DELETE", data) || sendDelete(data))
+		.then((data) => sendDelete(data))
 		.catch((err) => console.log(err))
 };
 
